@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gitar — Don't just review. Ship.</title>
+    <meta name="description" content="An interactive 3D journey through Gitar, the code change verification agent by Sonar." />
+    <link rel="icon" href="/gitar-wordmark.svg" />
+  </head>
+  <body>
+    <canvas id="gl"></canvas>
+
+    <div id="loader">
+      <div class="loader-inner">
+        <img src="/gitar-wordmark.svg" alt="gitar" />
+        <div class="loader-bar"><span></span></div>
+        <div class="loader-text mono">compiling verification pipeline…</div>
+      </div>
+    </div>
+
+    <header class="topbar">
+      <a class="brand" href="#hero" aria-label="Gitar home">
+        <img src="/gitar-wordmark.svg" alt="gitar" />
+        <span class="by mono">by sonar</span>
+      </a>
+      <div class="stage-hud mono" aria-hidden="true">
+        <span data-stage="review">review</span>
+        <i></i>
+        <span data-stage="ci">diagnose</span>
+        <i></i>
+        <span data-stage="fix">fix</span>
+        <i></i>
+        <span data-stage="green">verify</span>
+        <i></i>
+        <span data-stage="ship">ship</span>
+      </div>
+      <a class="cta mono" href="https://www.sonarsource.com/products/gitar/" target="_blank" rel="noopener">Install free →</a>
+    </header>
+
+    <nav class="chapters mono" aria-label="Chapters"></nav>
+
+    <div class="sound-hint mono" id="hint">scroll to ship ↓</div>
+
+    <main id="story">
+      <section id="hero" data-side="left" data-title="Gitar">
+        <div class="copy hero-copy">
+          <div class="eyebrow mono"><b></b>gitar · code change verification agent</div>
+          <h1>Don't just review.<br /><em>Ship.</em></h1>
+          <p class="lede">
+            The verification agent for teams shipping at agentic volume and velocity. High-signal review,
+            CI failures diagnosed, fixes applied under your supervision, and proof every change passes your CI.
+          </p>
+          <div class="chips mono"><span>review</span><span>diagnose</span><span>fix</span><span>verify</span><span>ship</span></div>
+        </div>
+      </section>
+
+      <section id="problem" data-side="left" data-title="The problem">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>the problem</div>
+          <h2>Agents write faster than your pipeline can verify.</h2>
+          <p>
+            AI removed the constraint on <i>writing</i> code. It did not remove the constraint on <i>trusting</i> it.
+            Review queues lengthen, CI gets noisier, and the gap between “the code exists” and “the code ships” is
+            where velocity goes to die.
+          </p>
+          <div class="stat mono"><span class="stat-num" id="queue-count">0</span><span class="stat-label">pull requests waiting on a human</span></div>
+          <p class="kicker mono">verification is the new bottleneck.</p>
+        </div>
+      </section>
+
+      <section id="review" data-side="right" data-title="01 · Review" data-stage="review">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>01 · high-signal review</div>
+          <h2>High signal. Very little noise.</h2>
+          <p>
+            Gitar reviews every pull request with full context of your codebase and conventions, and is tuned to flag issues
+            that are <i>real</i>. Fewer false positives means a higher fix rate, less review fatigue, and fewer tokens spent
+            chasing ghosts.
+          </p>
+          <ul class="ticks mono">
+            <li><b class="r"></b>real findings surface, nitpicks dissolve</li>
+            <li><b class="b"></b>one consolidated comment</li>
+            <li><b class="g"></b>inline only where it matters</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="ci" data-side="left" data-title="02 · Diagnose" data-stage="ci">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>02 · ci analysis</div>
+          <h2>CI failures diagnosed, not dumped on you.</h2>
+          <p>
+            Gitar reads your pipeline and separates real breakage from flaky tests and infrastructure noise. It
+            de-duplicates failures and root-causes what actually went wrong, so nobody loses an afternoon to logs.
+          </p>
+          <ul class="legend mono">
+            <li><b style="--c: var(--red)"></b>real breakage</li>
+            <li><b style="--c: var(--amber)"></b>flaky test</li>
+            <li><b style="--c: var(--violet)"></b>infra noise</li>
+            <li><b style="--c: var(--green)"></b>passing</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="fix" data-side="right" data-title="03 · Fix" data-stage="fix">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>03 · gitar fixes</div>
+          <h2>Fixes applied autonomously — under your supervision.</h2>
+          <p>
+            When Gitar finds a problem it doesn't just comment. It generates a real fix and commits it to the branch, within
+            the rules you define. You decide what it can fix, what it must escalate, and what blocks a merge.
+          </p>
+        </div>
+      </section>
+
+      <section id="green" data-side="left" data-title="04 · Verify" data-stage="green">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>04 · confirmed green</div>
+          <h2>Confirmed green before you ship.</h2>
+          <p>
+            Gitar iterates until your CI passes, then commits only on green. A passing pipeline you didn't have to babysit
+            is the deliverable.
+          </p>
+          <div class="stat mono"><span class="stat-num" id="iter-count">iteration 1</span><span class="stat-label" id="iter-label">running checks…</span></div>
+        </div>
+      </section>
+
+      <section id="rules" data-side="right" data-title="Guardrails">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>under your control</div>
+          <h2>Write your merge policy in plain English.</h2>
+          <p>
+            Define what Gitar reviews, what it may fix, what blocks a merge, and when it can approve. Rules live in your repo as
+            natural language, versioned alongside your code. No bespoke scripting, no plugin sprawl.
+          </p>
+          <code class="path mono">.gitar/rules/*.md</code>
+        </div>
+      </section>
+
+      <section id="integrations" data-side="left" data-title="Integrations">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>integrations</div>
+          <h2>Verifies against the CI you already run.</h2>
+          <p>
+            Gitar doesn't replace your pipeline — it reads it. Connect your repos and CI in minutes and keep every runner,
+            job and gate exactly where it is.
+          </p>
+        </div>
+      </section>
+
+      <section id="analytics" data-side="right" data-title="05 · Insights" data-stage="ship">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>05 · transparency</div>
+          <h2>Measure and improve the process itself.</h2>
+          <p>
+            Analytics dashboards show how review and CI are actually performing across every repo: time to merge, review
+            cycle length, failure patterns, flake rates, and how much of the fix work Gitar absorbed.
+          </p>
+          <p class="kicker mono">report the trend, not the anecdote.</p>
+          <p class="fine mono">chart is illustrative</p>
+        </div>
+      </section>
+
+      <section id="enterprise" data-side="left" data-title="Enterprise">
+        <div class="copy">
+          <div class="eyebrow mono"><b></b>enterprise ready</div>
+          <h2>Built for platform engineering at scale.</h2>
+          <p>
+            Gitar does not retain source code, never uses your code to train models, and holds zero data retention agreements
+            with all LLM providers. Outcome-based pricing per PR: pay for results, not seats.
+          </p>
+          <div class="badges mono"><span>SOC 2 Type II</span><span>ISO 27001</span><span>GDPR</span><span>Zero Data Retention</span></div>
+        </div>
+      </section>
+
+      <section id="ship" data-side="center" data-title="Ship" data-stage="ship">
+        <div class="copy finale">
+          <div class="eyebrow mono"><b></b>reviewed · fixed · verified</div>
+          <h2 class="big">Don't just review.<br /><em>Ship.</em></h2>
+          <div class="ctas">
+            <a class="btn primary mono" href="https://www.sonarsource.com/products/gitar/" target="_blank" rel="noopener">Install free</a>
+            <a class="btn mono" href="https://www.sonarsource.com/products/gitar/" target="_blank" rel="noopener">Book a demo</a>
+          </div>
+          <p class="fine mono">free 14-day trial · github · gitlab · bitbucket · azure devops</p>
+          <div class="ghosts">
+            <button class="btn ghost mono" id="replay" type="button">↺ replay the journey</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
