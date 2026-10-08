@@ -2,6 +2,8 @@
 
 An interactive, scroll-driven three.js journey through **Gitar**, Sonar's code change verification agent.
 
+**Live:** https://kcarlsen-sonarsource.github.io/gitar-interactive-animation/
+
 ```bash
 pnpm install
 pnpm dev      # http://localhost:5173

@@ -122,6 +122,7 @@ async function boot() {
   const onResize = () => {
     const w = window.innerWidth;
     const h = window.innerHeight;
+    if (w === 0 || h === 0) return; // hidden/background tab: keep the last valid size
     renderer.setSize(w, h);
     post.setSize(w, h, pr);
     camera.aspect = w / h;
@@ -143,7 +144,8 @@ async function boot() {
 
   /** Scroll → chapter coordinate, with dwell: camera holds while copy is readable, then flies. */
   const targetCoord = () => {
-    const f = window.scrollY / window.innerHeight;
+    // guard: a background tab can report innerHeight 0, and a NaN here would freeze the camera forever
+    const f = window.innerHeight > 0 ? window.scrollY / window.innerHeight : 0;
     const i = Math.floor(f);
     const frac = f - i;
     return clamp(i + smootherstep((frac - 0.28) / 0.6), 0, N - 1);
@@ -164,6 +166,7 @@ async function boot() {
     const dt = forced ? (forced.dt ?? 1 / 60) : Math.min(clock.getDelta(), 1 / 20);
     t = forced ? (forced.t ?? (typeof forced.since === 'number' ? forced.since : 0) + 30) : t + dt;
     cur = forced ? forced.coord : clamp(lerp(cur, targetCoord(), damp(3.2, dt)), 0, N - 1);
+    if (!Number.isFinite(cur)) cur = 0;
     const i0 = Math.floor(cur);
     const i1 = Math.min(i0 + 1, N - 1);    const k = cur - i0;
 
